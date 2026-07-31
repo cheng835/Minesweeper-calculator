@@ -1,4 +1,4 @@
-import BoardSizes as bs
+import src.BoardSizes as bs
 import numpy as np
 import random
 
@@ -11,18 +11,41 @@ def generateBoard(rows, cols, bombNum):
         randomCol = random.randint(0, cols - 1)
 
         if(board[randomRow, randomCol] == 0):
-            board[randomRow, randomCol] = 1
+            board[randomRow, randomCol] = "X"
             bombs += 1
 
     return board
 
+#counts how many mines bordering given the coord
+def bombCounter(rowNum, colNum, board):
+    count = 0
+
+    directions = [
+        (-1, -1), (-1, 0), (-1, 1), 
+        (0, -1),           (0, 1),
+        (1, -1), (1, 0), (1, 1)
+    ]
+    #top row, middle row, bottom row
+
+    for r, c in directions:
+        new_row = rowNum + r
+        new_col = colNum + c
+
+        #checking boundaries
+        if(0 <= new_row < board.shape[0] and
+            0 <= new_col < board.shape[1]):
+
+                if(board[new_row][new_col] == "X"):
+                    count += 1
+
+    return count
+    
+
+                      
 def displayBoard(board):
     for r in range(board.shape[0]):
         print()
         for c in range(board.shape[1]):
-            if(board[r][c]):
-                print("X", end = " ")
-            else:
                 print(int(board[r][c]), end = " ")
     print("\n")
 
