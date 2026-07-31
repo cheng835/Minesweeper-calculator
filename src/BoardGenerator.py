@@ -1,7 +1,8 @@
-import src.BoardSizes as bs
+from . import BoardSizes as bs
 import numpy as np
 import random
 
+#generates board with just bomb locations
 def generateBoard(rows, cols, bombNum):
     board = np.zeros((rows, cols))
     bombs = 0
@@ -11,7 +12,7 @@ def generateBoard(rows, cols, bombNum):
         randomCol = random.randint(0, cols - 1)
 
         if(board[randomRow, randomCol] == 0):
-            board[randomRow, randomCol] = "X"
+            board[randomRow, randomCol] = "-1"
             bombs += 1
 
     return board
@@ -35,26 +36,26 @@ def bombCounter(rowNum, colNum, board):
         if((0 <= new_row and new_row < len(board)) and
             (0 <= new_col and new_col < len(board[0]))):
 
-                if(board[new_row][new_col] == "X"):
+                if(board[new_row][new_col] == -1):
                     count += 1
 
     return count
-    
 
-                      
+#generates numbers depending on the mines only board
+def solveBoard(board):
+    solvedBoard = board
+
+    for r in range(len(board)):
+        for c in range(len(board[0])):
+             if(board[r][c] == 0):
+                  solvedBoard[r][c] = bombCounter(r, c, board)
+    return solvedBoard
+
+
+#displays the board                      
 def displayBoard(board):
-    for r in range(board.shape[0]):
+    for r in range(len(board)):
         print()
-        for c in range(board.shape[1]):
-                print(int(board[r][c]), end = " ")
+        for c in range(len(board[0])):
+                print(f"{int(board[r][c]):>3}", end = ' ')
     print("\n")
-
-if __name__ == "__main__":
-    option = bs.printOptions()
-
-    while(option.lower() != "quit"):
-        rows, cols, bombs = bs.getBoard(option)
-        board = generateBoard(rows, cols, bombs)
-        displayBoard(board)
-        option = bs.printOptions()
-    print("bye bye")
