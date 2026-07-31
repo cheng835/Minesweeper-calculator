@@ -32,8 +32,8 @@ def bombCounter(rowNum, colNum, board):
         new_col = colNum + c
 
         #checking boundaries
-        if(0 <= new_row < board.shape[0] and
-            0 <= new_col < board.shape[1]):
+        if((0 <= new_row and new_row < len(board)) and
+            (0 <= new_col and new_col < len(board[0]))):
 
                 if(board[new_row][new_col] == "X"):
                     count += 1
