@@ -15,7 +15,7 @@ def generateBoard(rows, cols, bombNum):
             board[randomRow, randomCol] = "-1"
             bombs += 1
 
-    return board
+    return board.astype(int)
 
 #counts how many mines bordering given the coord
 def bombCounter(rowNum, colNum, board):
