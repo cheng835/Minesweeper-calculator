@@ -54,6 +54,15 @@
     background-position: 0px -208px;
 }
 
-.notBomb {
+.wrongFlag {
     background-position: 0px -224px;
+}
+
+.clickedBomb {
+    background-position: 0px -240px;
+}
+
+#board {
+    display:  grid;
+    gap: 0px;
 }
