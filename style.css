@@ -54,12 +54,19 @@
     background-position: 0px -208px;
 }
 
-.wrongFlag {
+.revealedBomb {
     background-position: 0px -224px;
+    /*this is just bomb*/
+} 
+
+.wrongBomb {
+    background-position: 0px -224px;
+    /*this is bomb w/ red X*/
 }
 
 .clickedBomb {
     background-position: 0px -240px;
+    /*this is bomb w/ red box*/
 }
 
 #board {

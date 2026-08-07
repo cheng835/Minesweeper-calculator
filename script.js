@@ -1,4 +1,7 @@
-function createTile(row, col, data) {
+import { handleLeftClick, handleRightClick, handleDoubleClick } from "./js/event.js";
+import {init} from "./js/logic.js";
+
+export function createTile(row, col, data) {
     const value = data.solvedBoard[row][col];
 
     const tile = {
@@ -14,6 +17,7 @@ function createTile(row, col, data) {
     tile.el.dataset.row = row;
     tile.el.dataset.col = col;
 
+    /*turn all these listeners into functions inside event.js*/
     tile.el.addEventListener("click", () => handleLeftClick(tile));
     tile.el.addEventListener("contextmenu", (e) => {
         e.preventDefault();
@@ -21,42 +25,31 @@ function createTile(row, col, data) {
         /*prevents it from its usual behavior of right click opening up the browser menu*/
     })
 
+    let leftDown = false;
+    let rightDown = false;
+    tile.el.addEventListener("mousedown", (e) =>  {
+        if(e.button === 0)
+            leftDown = true;
+        if(e.button === 2)
+            rightDown = true;
+        if(leftDown && rightDown) {
+            e.preventDefault();
+            handleDoubleClick(tile);
+        }
+    })
+
     return tile;
 }
 
-function handleLeftClick(tile) {
-    if (tile.flagged || tile.clicked) return;
-
-    tile.clicked = true; //sets property to clicked
-    if(tile.value == -1) {
-        tile.el.classList.add("clickedBomb");
-    } else {
-        switch(tile.value){
-            case 0: tile.el.classList.add("clicked"); break;
-            case 1: tile.el.classList.add("num1"); break;
-            case 2: tile.el.classList.add("num2"); break;
-            case 3: tile.el.classList.add("num3"); break;
-            case 4: tile.el.classList.add("num4"); break;
-            case 5: tile.el.classList.add("num5"); break;
-            case 6: tile.el.classList.add("num6"); break;
-            case 7: tile.el.classList.add("num7"); break;
-        }
-    }
-}
-
-function handleRightClick(tile) {
-    if(tile.clicked) return;
-
-    tile.flagged = !tile.flagged;
-    tile.el.classList.toggle("flag", tile.flagged);
-}
-
-async function createBoard() {
+export async function getBoard() {
     const response = await fetch("data.json", {cache: "no-store"});
-    /*cache bc it wouldnt update with new info from data.json*/
+    /*cache so it updates with new info from data.json*/
 
     const data = await response.json();
+    return data;
+}
 
+export async function createBoard(data) {
     const board = document.getElementById("board");
     board.style.gridTemplateColumns = `repeat(${data.cols}, 16px)`;
 
@@ -64,15 +57,21 @@ async function createBoard() {
 
     for(let r = 0; r < data.rows; r++) {
         const rowArr = [];
+        console.log("test");
         //this gets you a grid instead of list
         for(let c = 0; c < data.cols; c++)
         {
             const tile = createTile(r, c, data);
             board.appendChild(tile.el);
             rowArr.push(tile);
+            
         }
         tiles.push(rowArr);
     }
+    return tiles;
 }
 
-createBoard();
+/*console.log("board created");*/
+const data = await getBoard();
+const tiles = await createBoard(data);
+init(data, tiles);
