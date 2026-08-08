@@ -1,0 +1,75 @@
+.tile {
+    width: 16px;
+    height: 16px;
+
+    background-image: url("assets/tiles.png");
+    /*background-repeat: no-repeat;*/
+}
+
+.notClicked {
+    background-position: 0px 0px;
+}
+
+.clicked {
+    background-position: 0px -16px;
+}
+
+.flag {
+    background-position: 0px -32px;
+}
+
+.num1 {
+    background-position: 0px -80px;
+}
+
+.num2 {
+    background-position: 0px -96px;
+}
+
+.num3 {
+    background-position: 0px -112px;
+}
+
+.num4 {
+    background-position: 0px -128px;
+}
+
+.num5 {
+    background-position: 0px -144px;
+}
+
+.num6 {
+    background-position: 0px -160px;
+}
+
+.num7 {
+    background-position: 0px -176px;
+}
+
+.num8 {
+    background-position: 0px -192px;
+}
+
+.bomb {
+    background-position: 0px -208px;
+}
+
+.revealedBomb {
+    background-position: 0px -224px;
+    /*this is just bomb*/
+} 
+
+.wrongBomb {
+    background-position: 0px -224px;
+    /*this is bomb w/ red X*/
+}
+
+.clickedBomb {
+    background-position: 0px -240px;
+    /*this is bomb w/ red box*/
+}
+
+#board {
+    display:  grid;
+    gap: 0px;
+}
