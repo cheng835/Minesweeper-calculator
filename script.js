@@ -1,4 +1,4 @@
-import { handleLeftClick, handleRightClick, handleDoubleClick } from "./js/event.js";
+import { listenLeftClick, listenRightClick, listenDoubleClick } from "./js/event.js";
 import {init} from "./js/logic.js";
 
 export function createTile(row, col, data) {
@@ -18,25 +18,9 @@ export function createTile(row, col, data) {
     tile.el.dataset.col = col;
 
     /*turn all these listeners into functions inside event.js*/
-    tile.el.addEventListener("click", () => handleLeftClick(tile));
-    tile.el.addEventListener("contextmenu", (e) => {
-        e.preventDefault();
-        handleRightClick(tile);
-        /*prevents it from its usual behavior of right click opening up the browser menu*/
-    })
-
-    let leftDown = false;
-    let rightDown = false;
-    tile.el.addEventListener("mousedown", (e) =>  {
-        if(e.button === 0)
-            leftDown = true;
-        if(e.button === 2)
-            rightDown = true;
-        if(leftDown && rightDown) {
-            e.preventDefault();
-            handleDoubleClick(tile);
-        }
-    })
+    listenLeftClick(tile);
+    listenRightClick(tile);
+    listenDoubleClick(tile);
 
     return tile;
 }
@@ -57,7 +41,6 @@ export async function createBoard(data) {
 
     for(let r = 0; r < data.rows; r++) {
         const rowArr = [];
-        console.log("test");
         //this gets you a grid instead of list
         for(let c = 0; c < data.cols; c++)
         {
@@ -71,7 +54,6 @@ export async function createBoard(data) {
     return tiles;
 }
 
-/*console.log("board created");*/
 const data = await getBoard();
 const tiles = await createBoard(data);
 init(data, tiles);

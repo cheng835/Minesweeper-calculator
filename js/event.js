@@ -1,5 +1,46 @@
 import {flagCounter, flagChecker, getNeighbors, getTiles, getData} from "./logic.js";
 
+/*listeners*/
+export function listenLeftClick(tile) {
+    tile.el.addEventListener("click", () => handleLeftClick(tile));
+}
+
+export function listenRightClick(tile) {
+        tile.el.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+        handleRightClick(tile);
+        /*prevents it from its usual behavior of right click opening up the browser menu*/
+    })
+}
+
+export function listenDoubleClick(tile) {
+    let leftDown = false;
+    let rightDown = false;
+    tile.el.addEventListener("mousedown", (e) =>  {
+        if(e.button === 0)
+            leftDown = true;
+        if(e.button === 2)
+            rightDown = true;
+        if(leftDown && rightDown) {
+            e.preventDefault();
+            handleDoubleClick(tile);
+        }
+    })
+
+    tile.el.addEventListener("mouseup", (e) => {
+        const wasDoubleClicked = leftDown && rightDown;
+        if(e.button === 0)
+            leftDown = false;
+        if(e.button === 2)
+            rightDown === false;
+        if(wasDoubleClicked) {
+            e.preventDefault();
+            unhighlightNeighbors(tile);
+        }
+    })
+}
+
+/*event handlers*/
 export function handleLeftClick(tile) {
     if (tile.flagged || tile.clicked) return;
 
@@ -20,18 +61,17 @@ export function handleLeftClick(tile) {
     }
 }
 
-export function handleRightClick(tile) {
+function handleRightClick(tile) {
     if(tile.clicked) return;
 
     tile.flagged = !tile.flagged;
     tile.el.classList.toggle("flag", tile.flagged);
 }
 
-export function handleDoubleClick(tile) {
-    if(tile.flagged) return;
+function handleDoubleClick(tile) {
     const tiles = getTiles();
-    console.log("mousedown");
-    if(flagCounter(tile))
+
+    if(!tile.flagged && flagCounter(tile))
         flagChecker(tile);
     else {
         for(const[row, col] of getNeighbors(tile)) {
@@ -40,5 +80,16 @@ export function handleDoubleClick(tile) {
                 t.el.classList.add("clicked");
         }
     }
+}
+
+function unhighlightNeighbors(tile) {
+    const tiles = getTiles();
+
+    for(const[row, col] of getNeighbors(tile)) {
+        const t = tiles[row][col];
+        /*console.log(t);*/
+        if(!t.clicked && !t.flagged)
+                t.el.classList.remove("clicked");
+        }
 }
 

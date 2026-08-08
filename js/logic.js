@@ -38,12 +38,13 @@ export function flagChecker(tile) {
     let logic = true;
 
     for(const [row, col] of getNeighbors(tile)) {
-        if((boardData.solvedBoard[row][col] === -1) && (!boardTiles[row][col].flagged)) {
-            tile.el.classList.add("clickedBomb");
+        const t = boardTiles[row][col];
+        if((boardData.solvedBoard[row][col] === -1) && (!t.flagged)) {
+            t.el.classList.add("clickedBomb");
             logic = false;
         }
-        if((boardTiles[row][col].flagged) && (boardData.solvedBoard[row][col] !== -1)) {
-            tile.el.classList.add("wrongBomb");
+        if((t.flagged) && (boardData.solvedBoard[row][col] !== -1)) {
+            t.el.classList.add("wrongBomb");
             logic = false;
         }
 
@@ -52,7 +53,7 @@ export function flagChecker(tile) {
         for (let r = 0; r < boardTiles.length; r++) {
             for(let c = 0; c < boardTiles[r].length; c++) {
                 if(boardTiles[r][c].value === -1)
-                    boardTiles[r][c].el.classList.add("revealedBomb");
+                    boardTiles[r][c].el.classList.add("bomb");
             }        
         }
     }

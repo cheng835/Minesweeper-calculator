@@ -54,11 +54,6 @@
     background-position: 0px -208px;
 }
 
-.revealedBomb {
-    background-position: 0px -224px;
-    /*this is just bomb*/
-} 
-
 .wrongBomb {
     background-position: 0px -224px;
     /*this is bomb w/ red X*/
