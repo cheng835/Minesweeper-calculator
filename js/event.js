@@ -46,6 +46,7 @@ export function handleLeftClick(tile) {
 
     tile.clicked = true; //sets property to clicked
     if(tile.value == -1) {
+        /*add game ending logic*/
         tile.el.classList.add("clickedBomb");
     } else {
         switch(tile.value){
@@ -66,6 +67,7 @@ function handleRightClick(tile) {
 
     tile.flagged = !tile.flagged;
     tile.el.classList.toggle("flag", tile.flagged);
+    /*add mine counting logic here*/
 }
 
 function handleDoubleClick(tile) {
@@ -74,6 +76,7 @@ function handleDoubleClick(tile) {
     if(!tile.flagged && flagCounter(tile))
         flagChecker(tile);
     else {
+        /*this just highlights neighbors*/
         for(const[row, col] of getNeighbors(tile)) {
             const t = tiles[row][col];
             if(!t.clicked && !t.flagged)
