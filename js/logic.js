@@ -1,23 +1,12 @@
 import { handleLeftClick } from "./event.js";
+import {getData, getTiles} from "./state.js"
 
-let boardData;
-let boardTiles;
-/*so i dont have to pass data and tiles into every function in here*/
-
-export function init(data, tiles) {
-    boardData = data;
-    boardTiles = tiles;
-}
-
-export function getTiles() {
-    return boardTiles;
-}
-
-export function getData() {
-    return boardData;
-}
-
+/*this function checks of the number of flags matches the value of the tile*/
 export function flagCounter(tile) {
+    if(tile.clicked === false) return;
+    const boardData = getData();
+    const boardTiles = getTiles();
+
     let bombTotal = 0;
     let flagTotal = 0;
 
@@ -34,7 +23,11 @@ export function flagCounter(tile) {
 }
 
 /*this command assumes flagCounter returns true*/
+/*function checks whether the flags are in the right places returns true or false*/
 export function flagChecker(tile) {
+    if(tile.clicked === false) return;
+    const boardData = getData();
+    const boardTiles = getTiles();
     let logic = true;
 
     for(const [row, col] of getNeighbors(tile)) {
@@ -63,9 +56,13 @@ export function flagChecker(tile) {
         }
     }
 
+    return logic;
 }
 
 export function getNeighbors(tile) {
+    const boardData = getData();
+    const boardTiles = getTiles();
+
     const directions = [
         [-1, -1], [-1, 0], [-1, 1], 
         [0, -1],           [0, 1],

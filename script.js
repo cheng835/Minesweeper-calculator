@@ -1,5 +1,7 @@
-import { listenLeftClick, listenRightClick, listenDoubleClick } from "./js/event.js";
-import {init} from "./js/logic.js";
+console.log("TEST");
+
+import { initMouseState, listenHover, listenLeftClick, listenRightClick } from "./js/event.js";
+import {initBoard, getData, getTiles} from "./js/state.js";
 
 export function createTile(row, col, data) {
     const value = data.solvedBoard[row][col];
@@ -16,19 +18,13 @@ export function createTile(row, col, data) {
     tile.el.classList.add("tile");
     tile.el.dataset.row = row;
     tile.el.dataset.col = col;
-
-    /*turn all these listeners into functions inside event.js*/
-    listenLeftClick(tile);
-    listenRightClick(tile);
-    listenDoubleClick(tile);
-
     return tile;
+    
 }
 
 export async function getBoard() {
     const response = await fetch("data.json", {cache: "no-store"});
     /*cache so it updates with new info from data.json*/
-
     const data = await response.json();
     return data;
 }
@@ -54,6 +50,13 @@ export async function createBoard(data) {
     return tiles;
 }
 
-const data = await getBoard();
-const tiles = await createBoard(data);
-init(data, tiles);
+await initBoard();
+const tiles = getTiles();
+initMouseState();
+for(const row of tiles) {
+    for(const tile of row) {
+        listenHover(tile);
+        listenLeftClick(tile);
+        listenRightClick(tile);
+    }
+}
