@@ -136,6 +136,8 @@ function highlightNeighbors(tile) {
 function unhighlightNeighbors(tile) {
     const tiles = getTiles();
 
+    if(!tile.clicked && !tile.flagged)
+        tile.el.classList.remove("clicked");
     for(const[row, col] of getNeighbors(tile)) {
         const t = tiles[row][col];
         if(!t.clicked && !t.flagged)
