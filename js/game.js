@@ -1,7 +1,7 @@
 import {getNeighbors} from "./logic.js"
 import {getData, getTiles} from "./state.js"
 
-export function floodFill (tile) {;
+export function floodFill (tile) {
     const data = getData();
     const tiles = getTiles();
 
