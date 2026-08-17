@@ -60,7 +60,8 @@ export function showBombs() {
     
     for (let r = 0; r < boardTiles.length; r++) {
             for(let c = 0; c < boardTiles[r].length; c++) {
-                if(boardTiles[r][c].value === -1)
+                const t = boardTiles[r][c];
+                if(t.value === -1 && !t.flagged)
                     boardTiles[r][c].el.classList.add("bomb");
             }        
         }

@@ -65,6 +65,10 @@
 }
 
 #board {
-    display:  grid;
+    display: inline-grid;
     gap: 0px;
+
+    background-color: lightgrey;
+    padding: 10px;
+    padding-top: 50px;
 }

@@ -34,6 +34,7 @@ export function listenHover(tile) {
 
 export function listenLeftClick(tile) {
     tile.el.addEventListener("click", () => {
+        // console.log("gameEnd: ", gameEnd);
         if(gameEnd) return;
         if(suppressClick) {
             suppressClick = false;
@@ -93,7 +94,6 @@ function onDocumentMouseUp(e) {
 
 export function handleLeftClick(tile) {
     console.log("left click");
-    console.log(gameEnd);
     if(tile.flagged || tile.clicked) return;
 
     tile.clicked = true;
@@ -103,16 +103,7 @@ export function handleLeftClick(tile) {
         showBombs();
     } 
     else {
-        switch(tile.value){
-            case 0: tile.el.classList.add("clicked"); break;
-            case 1: tile.el.classList.add("num1"); break;
-            case 2: tile.el.classList.add("num2"); break;
-            case 3: tile.el.classList.add("num3"); break;
-            case 4: tile.el.classList.add("num4"); break;
-            case 5: tile.el.classList.add("num5"); break;
-            case 6: tile.el.classList.add("num6"); break;
-            case 7: tile.el.classList.add("num7"); break;
-        }
+        floodFill(tile);
     }
 }
 
@@ -141,7 +132,7 @@ function highlightNeighbors(tile) {
         if(!t.clicked && !t.flagged)
             t.el.classList.add("clicked");
     }
-    console.log("highlighting");
+    // console.log("highlighting");
 }
 
 function unhighlightNeighbors(tile) {
@@ -154,5 +145,5 @@ function unhighlightNeighbors(tile) {
         if(!t.clicked && !t.flagged)
                 t.el.classList.remove("clicked");
     }
-    console.log("unhighlighting");
+    // console.log("unhighlighting");
 }
