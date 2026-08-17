@@ -43,12 +43,7 @@ export function flagChecker(tile) {
 
     }
     if(!logic) {
-        for (let r = 0; r < boardTiles.length; r++) {
-            for(let c = 0; c < boardTiles[r].length; c++) {
-                if(boardTiles[r][c].value === -1)
-                    boardTiles[r][c].el.classList.add("bomb");
-            }        
-        }
+        showBombs();
     }
     else {
         for(const [row, col] of getNeighbors(tile)) {
@@ -57,6 +52,18 @@ export function flagChecker(tile) {
     }
 
     return logic;
+}
+
+export function showBombs() {
+    const boardData = getData();
+    const boardTiles = getTiles();
+    
+    for (let r = 0; r < boardTiles.length; r++) {
+            for(let c = 0; c < boardTiles[r].length; c++) {
+                if(boardTiles[r][c].value === -1)
+                    boardTiles[r][c].el.classList.add("bomb");
+            }        
+        }
 }
 
 export function getNeighbors(tile) {
