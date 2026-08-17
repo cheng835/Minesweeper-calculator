@@ -1,5 +1,3 @@
-console.log("TEST");
-
 import { initMouseState, listenHover, listenLeftClick, listenRightClick } from "./js/event.js";
 import {initBoard, getData, getTiles} from "./js/state.js";
 
