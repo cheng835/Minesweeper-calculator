@@ -1,4 +1,4 @@
-import {flagCounter, flagChecker, getNeighbors} from "./logic.js";
+import {flagCounter, flagChecker, showBombs, getNeighbors} from "./logic.js";
 import {getTiles, getData} from "./state.js"
 import {floodFill} from "./game.js"
 
@@ -8,6 +8,7 @@ let chording = false; //the double click motion: true when both buttons are down
 let locked = false; //true from when chording starts until both buttons are up
 let suppressClick = false;
 let suppressContext = false;
+let gameEnd = false;
 
 export function initMouseState() {
     document.addEventListener("mousedown", onDocumentMouseDown);
@@ -18,6 +19,7 @@ export function initMouseState() {
 /*allows highlight to follow wherever the mouse chord is hovering*/
 export function listenHover(tile) {
     tile.el.addEventListener("mouseenter", () => {
+        if(gameEnd) return;
         hoverTile = tile;
         if(chording) {
             unhighlightNeighbors(chordAnchor);
@@ -32,6 +34,7 @@ export function listenHover(tile) {
 
 export function listenLeftClick(tile) {
     tile.el.addEventListener("click", () => {
+        if(gameEnd) return;
         if(suppressClick) {
             suppressClick = false;
             return;
@@ -45,6 +48,7 @@ export function listenLeftClick(tile) {
 export function listenRightClick(tile) {
     tile.el.addEventListener("contextmenu", (e) => {
         e.preventDefault();
+        if(gameEnd) return;
         if(suppressContext) {
             suppressContext = false;
             return;
@@ -55,6 +59,8 @@ export function listenRightClick(tile) {
 
 /*detects the first instant when a user starts double clicking on a tile*/
 function onDocumentMouseDown(e) {
+    if(gameEnd) return;
+
     //e holds all the buttons currently held down
     if(e.buttons === 3 && !chording && hoverTile) {
         //buttons left(1) and right(2) are held, and cursor is currently hovering a tile 
@@ -67,6 +73,8 @@ function onDocumentMouseDown(e) {
 }
 
 function onDocumentMouseUp(e) {
+    if(gameEnd) return;
+
     if(chording) {
         unhighlightNeighbors(chordAnchor);
         chording = false;
@@ -85,11 +93,14 @@ function onDocumentMouseUp(e) {
 
 export function handleLeftClick(tile) {
     console.log("left click");
+    console.log(gameEnd);
     if(tile.flagged || tile.clicked) return;
 
     tile.clicked = true;
     if(tile.value === -1) {
         tile.el.classList.add("clickedBomb");
+        gameEnd = true;
+        showBombs();
     } 
     else {
         switch(tile.value){
@@ -116,7 +127,7 @@ function resolveChord(tile) {
     if(tile.value === 0) return;
     if(tile.clicked && !tile.flagged && flagCounter(tile)) {
         //tile is clicked, not flagged, and # of flags matches value
-        flagChecker(tile);
+        gameEnd = !flagChecker(tile); //returns whether flags are correct or not
     }
 }
 
